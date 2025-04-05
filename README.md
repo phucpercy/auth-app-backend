@@ -11,11 +11,7 @@ This repository contains the backend implementation for an authentication applic
   - [Installing Dependencies](#installing-dependencies)
   - [Running the Application Locally](#running-the-application-locally)
 - [Testing](#testing)
-- [Design Decisions and Trade-offs](#design-decisions-and-trade-offs)
-  - [Use of Python](#use-of-python)
-  - [Project Structure](#project-structure)
-  - [Dependency Management](#dependency-management)
-  - [Testing Strategy](#testing-strategy)
+- [Design Decisions and Trade-offs](#design-decisions-and-trade-offs) 
 
 ## Prerequisites
 
@@ -138,7 +134,7 @@ In developing the Auth App Backend, several critical design decisions were made 
 
 **Rationale**: The robustness and ease of use of `pytest` were considered beneficial for maintaining high code quality and facilitating test-driven development. 
 
-## 4. Security Considerations: Token Handling
+### 4. Security Considerations: Token Handling
 
 **Decision**: Implement token-based authentication for securing the application.
 
@@ -183,7 +179,7 @@ In developing the Auth App Backend, several critical design decisions were made 
 
 **Rationale**: While the initial single-token setup accelerated development and testing, the move to a dual-token architecture was essential for production readiness. It balances security and user experience by ensuring sessions can persist securely without compromising access control.
 
-## 6. Real-time Communication: Use of WebSockets
+### 6. Real-time Communication: Use of WebSockets
 
 **Decision**: Implement WebSocket protocol for real-time communication between the client and server.
 
