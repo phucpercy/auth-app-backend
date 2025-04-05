@@ -87,3 +87,120 @@ pytest
 ```
 
 ## Design Decisions and Trade-offs
+
+In developing the Auth App Backend, several critical design decisions were made to balance functionality, maintainability, and performance. This part outlines these decisions and the inherent trade-offs involved.
+
+### 1. Project Structure: Modular Organization
+
+**Decision**: Organize the project with distinct directories for source code (`src`) and tests (`tests`). 
+
+**Trade-offs**:
+
+- **Pros**:
+  - Enhances code maintainability and readability.
+  - Facilitates independent development and testing.
+
+- **Cons**:
+  - May introduce complexity in navigation for new developers. 
+  - Requires consistent enforcement of organizational standards.
+
+**Rationale**: The clear separation of concerns was deemed essential for scalability and collaborative development, outweighing the initial learning curve for new contributors. 
+
+### 2. Dependency Management: `requirements.txt`
+
+**Decision**: Manage project dependencies using a `requirements.txt` file.
+
+**Trade-offs**:
+
+- **Pros**:
+  - Simplifies the setup process for new environments.
+  - Ensures consistency across different development and production environments.
+
+- **Cons**:
+  - Requires manual updates to track changes in dependencies.
+  - Lacks advanced features like dependency resolution provided by tools such as Poetry. 
+
+**Rationale**: The simplicity and widespread familiarity of `requirements.txt` were favored to streamline onboarding and deployment processes.
+
+### 3. Testing Framework: `pytest`
+
+**Decision**: Implement testing using the `pytest` framework.
+
+**Trade-offs**:
+
+- **Pros**:
+  - Offers a simple syntax and powerful features for writing tests.
+  - Supports fixtures and plugins, enhancing test capabilities.
+
+- **Cons**:
+  - Introduces an additional dependency.
+  - May require learning for developers unfamiliar with the framework.
+
+**Rationale**: The robustness and ease of use of `pytest` were considered beneficial for maintaining high code quality and facilitating test-driven development. 
+
+## 4. Security Considerations: Token Handling
+
+**Decision**: Implement token-based authentication for securing the application.
+
+**Trade-offs**:
+
+- **Pros**:
+  - Enhances security by avoiding the need to store sensitive session data on the client side.
+  - Facilitates scalability by allowing stateless authentication mechanisms.
+
+- **Cons**:
+  - Requires careful handling of tokens to prevent security vulnerabilities.
+  - May introduce complexity in managing token expiration and refresh mechanisms.
+
+**Rationale**: Adopting token-based authentication aligns with modern security best practices and supports the application's scalability requirements. 
+
+### 5. Token Strategy: From Single Token to Dual Token System
+
+**Initial Decision**: Use a single token (typically an access token) for fast MVP development.
+
+**Pros of Initial Approach**:
+- Simplifies authentication logic during early development.
+- Reduces the number of moving parts and speeds up prototyping.
+- Easier for developers to implement and debug.
+
+**Cons**:
+- The access token typically has a short lifespan; reusing it for refresh purposes can pose security risks.
+- Lack of a separate refresh token makes maintaining long sessions more difficult and can lead to user frustration with frequent logouts.
+- Vulnerable to token theft scenarios without a secure token refresh mechanism.
+
+**Refactored Decision**: When time allowed, migrate to a dual-token system — short-lived access tokens and long-lived refresh tokens.
+
+**Trade-offs**:
+- **Pros**:
+  - Enhances security by limiting the exposure window of the access token.
+  - Allows seamless user experience with silent token refresh without re-authentication.
+  - Follows industry best practices for scalable and secure session management.
+
+- **Cons**:
+  - Increases complexity in token lifecycle management and storage.
+  - Requires careful design to securely store refresh tokens (especially on the client side).
+  - Adds extra logic for refreshing tokens and handling token expiration.
+
+**Rationale**: While the initial single-token setup accelerated development and testing, the move to a dual-token architecture was essential for production readiness. It balances security and user experience by ensuring sessions can persist securely without compromising access control.
+
+## 6. Real-time Communication: Use of WebSockets
+
+**Decision**: Implement WebSocket protocol for real-time communication between the client and server.
+
+**Trade-offs**:
+
+- **Pros**:
+  - Enables bi-directional, low-latency communication, ideal for real-time features like notifications, session monitoring, or live updates.
+  - Reduces the need for constant HTTP polling, improving efficiency and responsiveness.
+  - Enhances user experience through instant feedback mechanisms.
+
+- **Cons**:
+  - Introduces added complexity in backend infrastructure and client handling.
+  - Requires careful handling of authentication, connection lifecycle, and fallbacks for disconnected clients.
+  - Can be more difficult to scale horizontally compared to stateless HTTP endpoints.
+
+**Rationale**: The decision to use WebSockets reflects a need for responsive, interactive client-server communication that cannot be easily achieved with standard REST APIs. Despite the added complexity, the real-time capabilities it provides significantly enhance the user experience for authentication events or live updates.
+
+---
+
+*Note: These decisions are based on the current scope and requirements of the project. As the project evolves, continuous evaluation and adaptation of these choices may be necessary to address emerging challenges and opportunities.
